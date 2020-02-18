@@ -12,6 +12,7 @@ export const Container = styled.div`
 
   a {
     font: 38px 'Abel', sans-serif;
+    font-weight: bold;
     color: #0ce7f3;
   }
 `;
