@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { toast } from 'react-toastify';
+import { parseISO, format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import api from '../../services/api';
 
@@ -38,8 +40,15 @@ export default function MovieList() {
         return;
       }
 
-      console.log(response.data.results);
-      setMovies(response.data.results);
+      const data = response.data.results.map(r => ({
+        ...r,
+        dateFormatted: format(parseISO(r.release_date), 'dd/MM/yyyy', {
+          locale: pt,
+        }),
+      }));
+
+      // console.log(data);
+      setMovies(data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -89,7 +98,7 @@ export default function MovieList() {
                 </header>
 
                 <aside>
-                  <span>{movie.release_date}</span>
+                  <span>{movie.dateFormatted}</span>
 
                   <p>{movie.overview}</p>
 

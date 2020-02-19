@@ -74,6 +74,7 @@ export const Movie = styled.li`
 
   display: flex;
   height: 330px;
+  width: 100%;
 
   img {
     width: 220px;
@@ -81,6 +82,7 @@ export const Movie = styled.li`
   }
 
   > div {
+    width: 100%;
     background: #e6e6e6;
 
     header {
