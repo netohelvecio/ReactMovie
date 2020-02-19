@@ -1,105 +1,107 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { toast } from 'react-toastify';
+
+import api from '../../services/api';
 
 import Header from '../../components/Header';
-
 import { Container, Movie, Rating, Genre } from './styles';
 
 export default function MovieList() {
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [movies, setMovies] = useState([]);
+
+  async function handleSubmit(e) {
+    try {
+      e.preventDefault();
+
+      setLoading(true);
+
+      if (!search) {
+        toast.error('Preencha o campo!');
+        setLoading(false);
+        return;
+      }
+
+      const response = await api.get('search/movie', {
+        params: {
+          api_key: 'd9890f102dc9fcf0b442bb23413b8fea',
+          language: 'pt-BR',
+          query: search,
+        },
+      });
+
+      if (!response.data.results.length) {
+        toast.error('Nenhum filme encontrado!');
+        setLoading(false);
+        return;
+      }
+
+      console.log(response.data.results);
+      setMovies(response.data.results);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error('ERROR AO CONSULTAR API');
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <Header />
 
       <Container>
-        <form>
-          <input type="text" placeholder="Busque um filme por nome ou gênero" />
-          <button type="submit">Buscar</button>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Busque um filme por nome ou gênero"
+          />
+          <button type="submit">
+            {loading ? (
+              <AiOutlineLoading3Quarters color="#fff" size={20} />
+            ) : (
+              'Buscar'
+            )}
+          </button>
         </form>
 
         <ul>
-          <Movie>
-            <img
-              src="https://api.adorable.io/avatars/285/abott@adorable.png"
-              alt=""
-            />
+          {movies.map(movie => (
+            <Movie key={movie.id}>
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+              />
 
-            <div>
-              <header>
-                <Rating>
-                  <div>
-                    <span>89%</span>
-                  </div>
-                </Rating>
+              <div>
+                <header>
+                  <Rating>
+                    <div>
+                      <span>{movie.vote_average}</span>
+                    </div>
+                  </Rating>
 
-                <span>Parasita</span>
-              </header>
+                  <span>{movie.title}</span>
+                </header>
 
-              <aside>
-                <span>18/02/2020</span>
+                <aside>
+                  <span>{movie.release_date}</span>
 
-                <p>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Rerum libero repellendus corrupti dolore obcaecati dicta.
-                  Consectetur maiores, provident porro recusandae facilis
-                  corrupti aliquid fuga aut illo odit. Maiores, vitae quam.Lorem
-                  ipsum, dolor sit amet consectetur adipisicing elit. Rerum
-                  libero repellendus corrupti dolore obcaecati dicta.
-                  Consectetur maiores, provident porro recusandae facilis
-                  corrupti aliquid fuga aut illo odit. Maiores, vitae quam.Lorem
-                  ipsum, dolor sit amet consectetur adipisicing elit. Rerum
-                  libero repellendus corrupti dolore obcaecati dicta.
-                  Consectetur maiores, provident porro recusandae facilis
-                  corrupti aliquid fuga aut illo odit. Maiores, vitae quam.
-                </p>
+                  <p>{movie.overview}</p>
 
-                <Genre>
-                  <li>Aventura</li>
-                  <li>Heroi</li>
-                  <li>Fantasia</li>
-                </Genre>
-              </aside>
-            </div>
-          </Movie>
-
-          <Movie>
-            <img src="https://api.adorable.io/avatars/285/kaappa.png" alt="" />
-
-            <div>
-              <header>
-                <Rating>
-                  <div>
-                    <span>89%</span>
-                  </div>
-                </Rating>
-
-                <span>Parasita</span>
-              </header>
-
-              <aside>
-                <span>18/02/2020</span>
-
-                <p>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Rerum libero repellendus corrupti dolore obcaecati dicta.
-                  Consectetur maiores, provident porro recusandae facilis
-                  corrupti aliquid fuga aut illo odit. Maiores, vitae quam.Lorem
-                  ipsum, dolor sit amet consectetur adipisicing elit. Rerum
-                  libero repellendus corrupti dolore obcaecati dicta.
-                  Consectetur maiores, provident porro recusandae facilis
-                  corrupti aliquid fuga aut illo odit. Maiores, vitae quam.Lorem
-                  ipsum, dolor sit amet consectetur adipisicing elit. Rerum
-                  libero repellendus corrupti dolore obcaecati dicta.
-                  Consectetur maiores, provident porro recusandae facilis
-                  corrupti aliquid fuga aut illo odit. Maiores, vitae quam.
-                </p>
-
-                <Genre>
-                  <li>Aventura</li>
-                  <li>Heroi</li>
-                  <li>Fantasia</li>
-                </Genre>
-              </aside>
-            </div>
-          </Movie>
+                  <Genre>
+                    <li>Aventura</li>
+                    <li>Heroi</li>
+                    <li>Fantasia</li>
+                  </Genre>
+                </aside>
+              </div>
+            </Movie>
+          ))}
         </ul>
       </Container>
     </>

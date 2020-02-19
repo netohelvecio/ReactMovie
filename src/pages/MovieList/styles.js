@@ -1,5 +1,14 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { darken } from 'polished';
+
+const rotate = keyframes`
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+`;
 
 export const Container = styled.div`
   width: 90%;
@@ -40,6 +49,12 @@ export const Container = styled.div`
       justify-content: center;
       align-items: center;
 
+      svg {
+        margin: 0px;
+        padding: 0px;
+        animation: ${rotate} 1s linear infinite;
+      }
+
       &:hover {
         background: ${darken(0.05, '#136ca0')};
       }
@@ -58,43 +73,49 @@ export const Movie = styled.li`
   @import url('https://fonts.googleapis.com/css?family=Abel|Lato&display=swap');
 
   display: flex;
+  height: 330px;
 
   img {
     width: 220px;
+    height: 330px;
   }
 
-  header {
-    display: flex;
-    align-items: flex-end;
-    height: 60px;
-    background: #136ca0;
-    padding: 5px 20px;
-
-    > span {
-      color: #0ce7f3;
-      font: 30px 'Abel', sans-serif;
-      margin-left: 10px;
-    }
-  }
-
-  aside {
-    display: flex;
-    flex-direction: column;
-
+  > div {
     background: #e6e6e6;
-    padding: 3px 20px;
 
-    span {
-      font-size: 18px;
-      color: #666;
-      margin-left: 75px;
-      margin-bottom: 25px;
+    header {
+      display: flex;
+      align-items: flex-end;
+      height: 60px;
+      background: #136ca0;
+      padding: 5px 20px;
+
+      > span {
+        color: #0ce7f3;
+        font: 30px 'Abel', sans-serif;
+        margin-left: 10px;
+      }
     }
 
-    p {
-      font-size: 16px;
-      color: #333;
-      line-height: 18px;
+    aside {
+      display: flex;
+      flex-direction: column;
+
+      background: #e6e6e6;
+      padding: 3px 20px;
+
+      span {
+        font-size: 18px;
+        color: #666;
+        margin-left: 75px;
+        margin-bottom: 25px;
+      }
+
+      p {
+        font-size: 16px;
+        color: #333;
+        line-height: 18px;
+      }
     }
   }
 `;
