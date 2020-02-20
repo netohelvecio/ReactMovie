@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { MdAdd } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import { parseISO, format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
+import PropTypes from 'prop-types';
 
 import api from '../../services/api';
 
 import Header from '../../components/Header';
 import { Container, Movie, Rating, Genre } from './styles';
 
-export default function MovieList() {
+export default function MovieList({ history }) {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
@@ -72,7 +74,7 @@ export default function MovieList() {
         }),
       }));
 
-      console.log(data);
+      // console.log(data);
       setMovies(data);
       setLoading(false);
     } catch (error) {
@@ -80,6 +82,10 @@ export default function MovieList() {
       toast.error('ERROR AO CONSULTAR API');
       console.log(error);
     }
+  }
+
+  function navigateToDetails(id) {
+    history.push('/movie', id);
   }
 
   return (
@@ -127,17 +133,21 @@ export default function MovieList() {
 
                   <p>{movie.overview}</p>
 
-                  <Genre>
-                    {movie.mergedGenres.map(genre => (
-                      <li>{genre.name}</li>
-                    ))}
-                  </Genre>
+                  <div>
+                    <Genre>
+                      {movie.mergedGenres.map(genre => (
+                        <li key={genre.id}>{genre.name}</li>
+                      ))}
+                    </Genre>
 
-                  {/* <Genre>
-                    <li>Aventura</li>
-                    <li>Heroi</li>
-                    <li>Fantasia</li>
-                  </Genre> */}
+                    <button
+                      type="button"
+                      onClick={() => navigateToDetails(movie.id)}
+                    >
+                      <MdAdd color="#fff" size={20} />
+                      Detalhes
+                    </button>
+                  </div>
                 </aside>
               </div>
             </Movie>
@@ -147,3 +157,7 @@ export default function MovieList() {
     </>
   );
 }
+
+MovieList.propTypes = {
+  history: PropTypes.object.isRequired,
+};

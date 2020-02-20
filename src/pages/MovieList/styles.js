@@ -118,6 +118,38 @@ export const Movie = styled.li`
         color: #333;
         line-height: 18px;
       }
+
+      div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
+          background: #136ca0;
+          font-weight: bold;
+          color: #fff;
+          border: 0;
+          border-radius: 20px;
+          font-size: 16px;
+          transition: background 0.2s;
+          height: 31px;
+          padding: 0 25px;
+          margin-top: 30px;
+          margin-bottom: 15px;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          svg {
+            margin-right: 10px;
+          }
+
+          &:hover {
+            background: ${darken(0.05, '#136ca0')};
+          }
+        }
+      }
     }
   }
 `;
