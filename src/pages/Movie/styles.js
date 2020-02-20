@@ -1,9 +1,10 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const MovieCard = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 50px;
+  margin-bottom: 40px;
 `;
 
 export const MovieHeader = styled.div`
@@ -32,6 +33,10 @@ export const MovieInfo = styled.div`
 
   display: flex;
   background: #eee;
+
+  img {
+    width: 380px;
+  }
 
   > div {
     display: flex;
@@ -135,5 +140,47 @@ export const Rating = styled.div`
       font: 50px 'Abel', sans-serif;
       color: #0ce7f3;
     }
+  }
+`;
+
+const rotate = keyframes`
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+`;
+
+export const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 60px;
+
+  span {
+    font-size: 28px;
+    color: #136ca0;
+    font-weight: bold;
+    margin-left: 15px;
+  }
+
+  svg {
+    margin: 0px;
+    padding: 0px;
+    animation: ${rotate} 1s linear infinite;
+  }
+`;
+
+export const TrailerContainer = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 15px;
+  margin-bottom: 30px;
+
+  iframe {
+    width: 100%;
+    height: 600px;
   }
 `;

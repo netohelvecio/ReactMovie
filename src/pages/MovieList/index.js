@@ -58,8 +58,6 @@ export default function MovieList({ history }) {
         return;
       }
 
-      // console.log(response.data.results);
-
       const data = response.data.results.map(r => ({
         ...r,
         dateFormatted: format(parseISO(r.release_date), 'dd/MM/yyyy', {
@@ -84,8 +82,8 @@ export default function MovieList({ history }) {
     }
   }
 
-  function navigateToDetails(id) {
-    history.push('/movie', id);
+  function navigateToDetails(movie_) {
+    history.push('/movie', movie_);
   }
 
   return (
@@ -142,7 +140,7 @@ export default function MovieList({ history }) {
 
                     <button
                       type="button"
-                      onClick={() => navigateToDetails(movie.id)}
+                      onClick={() => navigateToDetails(movie)}
                     >
                       <MdAdd color="#fff" size={20} />
                       Detalhes
