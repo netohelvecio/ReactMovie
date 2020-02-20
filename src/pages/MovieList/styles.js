@@ -149,8 +149,8 @@ export const Rating = styled.div`
 
 export const Genre = styled.ul`
   display: flex;
-  margin-top: 15px;
-  margin-bottom: 30px;
+  margin-top: 30px;
+  margin-bottom: 15px;
 
   li {
     margin: 0 5px;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import { parseISO, format } from 'date-fns';
@@ -13,6 +13,22 @@ export default function MovieList() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
+  const [genres, setGenres] = useState([]);
+
+  useEffect(() => {
+    async function loadGenres() {
+      const response = await api.get('genre/movie/list', {
+        params: {
+          api_key: 'd9890f102dc9fcf0b442bb23413b8fea',
+          language: 'pt-BR',
+        },
+      });
+
+      setGenres(response.data.genres);
+    }
+
+    loadGenres();
+  }, []);
 
   async function handleSubmit(e) {
     try {
@@ -40,14 +56,23 @@ export default function MovieList() {
         return;
       }
 
+      // console.log(response.data.results);
+
       const data = response.data.results.map(r => ({
         ...r,
         dateFormatted: format(parseISO(r.release_date), 'dd/MM/yyyy', {
           locale: pt,
         }),
+        mergedGenres: r.genre_ids.map(genre => {
+          for (let i = 0; i < genres.length; i++) {
+            if (genre === genres[i].id) {
+              return { ...genres[i] };
+            }
+          }
+        }),
       }));
 
-      // console.log(data);
+      console.log(data);
       setMovies(data);
       setLoading(false);
     } catch (error) {
@@ -103,10 +128,16 @@ export default function MovieList() {
                   <p>{movie.overview}</p>
 
                   <Genre>
+                    {movie.mergedGenres.map(genre => (
+                      <li>{genre.name}</li>
+                    ))}
+                  </Genre>
+
+                  {/* <Genre>
                     <li>Aventura</li>
                     <li>Heroi</li>
                     <li>Fantasia</li>
-                  </Genre>
+                  </Genre> */}
                 </aside>
               </div>
             </Movie>
