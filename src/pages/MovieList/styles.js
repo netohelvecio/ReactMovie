@@ -198,3 +198,45 @@ export const Genre = styled.ul`
     }
   }
 `;
+
+export const Pagination = styled.div`
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+
+  ul {
+    display: flex;
+  }
+
+  button {
+    border-radius: 4px;
+    outline: 0;
+    border: 0;
+    background: #136ca0;
+    color: #fff;
+    padding: 8px;
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+`;
+
+export const PageElement = styled.li`
+  margin: 0 5px;
+  background: ${props => (props.select ? '#136ca0' : '#fff')};
+  border: ${props => (props.select ? '4px solid #0ce7f3' : '0')};
+  border-radius: 50%;
+  padding: 5px;
+  color: ${props => (props.select ? '#0ce7f3' : '#136ca0')};
+  font-size: 20px;
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

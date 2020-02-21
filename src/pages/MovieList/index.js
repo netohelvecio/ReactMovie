@@ -9,13 +9,23 @@ import PropTypes from 'prop-types';
 import api from '../../services/api';
 
 import Header from '../../components/Header';
-import { Container, Movie, Rating, Genre } from './styles';
+import {
+  Container,
+  Movie,
+  Rating,
+  Genre,
+  Pagination,
+  PageElement,
+} from './styles';
 
 export default function MovieList({ history }) {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [page, setPage] = useState(1);
+  const [finalPage, setFinalPage] = useState(0);
+  const [totalPages, setTotalPages] = useState([]);
 
   useEffect(() => {
     async function loadGenres() {
@@ -32,11 +42,47 @@ export default function MovieList({ history }) {
     loadGenres();
   }, []);
 
+  useEffect(() => {
+    async function loadMovies() {
+      if (page !== 1) {
+        const response = await api.get('search/movie', {
+          params: {
+            api_key: 'd9890f102dc9fcf0b442bb23413b8fea',
+            language: 'pt-BR',
+            query: search,
+            page,
+          },
+        });
+
+        const data = response.data.results.map(r => ({
+          ...r,
+          dateFormatted: r.release_date
+            ? format(parseISO(r.release_date), 'dd/MM/yyyy', {
+                locale: pt,
+              })
+            : null,
+          mergedGenres: r.genre_ids.map(genre => {
+            for (let i = 0; i < genres.length; i++) {
+              if (genre === genres[i].id) {
+                return { ...genres[i] };
+              }
+            }
+          }),
+        }));
+
+        setMovies(data);
+      }
+    }
+
+    loadMovies();
+  }, [page]);
+
   async function handleSubmit(e) {
     try {
       e.preventDefault();
 
       setLoading(true);
+      setPage(1);
 
       if (!search) {
         toast.error('Preencha o campo!');
@@ -49,6 +95,7 @@ export default function MovieList({ history }) {
           api_key: 'd9890f102dc9fcf0b442bb23413b8fea',
           language: 'pt-BR',
           query: search,
+          page,
         },
       });
 
@@ -60,9 +107,11 @@ export default function MovieList({ history }) {
 
       const data = response.data.results.map(r => ({
         ...r,
-        dateFormatted: format(parseISO(r.release_date), 'dd/MM/yyyy', {
-          locale: pt,
-        }),
+        dateFormatted: r.release_date
+          ? format(parseISO(r.release_date), 'dd/MM/yyyy', {
+              locale: pt,
+            })
+          : null,
         mergedGenres: r.genre_ids.map(genre => {
           for (let i = 0; i < genres.length; i++) {
             if (genre === genres[i].id) {
@@ -72,7 +121,14 @@ export default function MovieList({ history }) {
         }),
       }));
 
-      // console.log(data);
+      const nPages = [];
+
+      for (let i = 1; i <= response.data.total_pages; i++) {
+        nPages.push(i);
+      }
+
+      setTotalPages(nPages);
+      setFinalPage(response.data.total_pages);
       setMovies(data);
       setLoading(false);
     } catch (error) {
@@ -151,6 +207,36 @@ export default function MovieList({ history }) {
             </Movie>
           ))}
         </ul>
+
+        <Pagination>
+          <button
+            type="button"
+            disabled={page < 2}
+            onClick={() => setPage(page - 1)}
+          >
+            Anterior
+          </button>
+
+          <ul>
+            {totalPages.map(page_ => (
+              <PageElement
+                key={page_}
+                onClick={() => setPage(page_)}
+                select={page_ === page}
+              >
+                {page_}
+              </PageElement>
+            ))}
+          </ul>
+
+          <button
+            type="button"
+            disabled={page >= finalPage}
+            onClick={() => setPage(page + 1)}
+          >
+            Próximo
+          </button>
+        </Pagination>
       </Container>
     </>
   );
