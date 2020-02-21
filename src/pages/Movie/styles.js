@@ -117,6 +117,43 @@ export const MovieInfo = styled.div`
       }
     }
   }
+
+  @media only screen and (max-width: 768px) {
+    display: flex;
+    flex-direction: column-reverse;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  @media only screen and (max-width: 425px) {
+    > div {
+      > ul {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 30px;
+
+        li {
+          &:first-child {
+            text-align: center;
+          }
+        }
+      }
+
+      > div {
+        display: flex;
+        flex-direction: column;
+
+        ul {
+          display: flex;
+          margin-top: 30px;
+          margin-bottom: 15px;
+          height: 31px;
+        }
+      }
+    }
+  }
 `;
 
 export const Rating = styled.div`
@@ -139,6 +176,30 @@ export const Rating = styled.div`
     span {
       font: 50px 'Abel', sans-serif;
       color: #0ce7f3;
+    }
+  }
+
+  @media only screen and (max-width: 425px) {
+    border-radius: 50%;
+    border: 4px solid #136ca0;
+    width: 68px;
+    height: 68px;
+
+    div {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #136ca0;
+      border: 5px solid #0ce7f3;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      span {
+        font: 24px 'Abel', sans-serif;
+        color: #0ce7f3;
+      }
     }
   }
 `;

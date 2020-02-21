@@ -67,6 +67,20 @@ export const Container = styled.div`
     grid-gap: 30px;
     margin-bottom: 30px;
   }
+
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+    margin: auto;
+
+    form {
+      input {
+        &::placeholder {
+          color: #136ca0;
+          font-size: 12px;
+        }
+      }
+    }
+  }
 `;
 
 export const Movie = styled.li`
@@ -152,6 +166,52 @@ export const Movie = styled.li`
       }
     }
   }
+
+  @media only screen and (max-width: 768px) {
+    > div {
+      header {
+        > span {
+          font-size: 22px;
+        }
+      }
+
+      aside {
+        p {
+          font-size: 12px;
+          color: #333;
+          line-height: 14px;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 425px) {
+    img {
+      display: none;
+    }
+
+    > div {
+      header {
+        height: 40px;
+
+        > span {
+          font-size: 14px;
+        }
+      }
+
+      aside {
+        p {
+          font-size: 12px;
+          color: #333;
+          line-height: 14px;
+          max-width: 380px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
 `;
 
 export const Rating = styled.div`
@@ -197,6 +257,10 @@ export const Genre = styled.ul`
       margin-left: 0;
     }
   }
+
+  @media only screen and (max-width: 425px) {
+    display: none;
+  }
 `;
 
 export const Pagination = styled.div`
@@ -239,4 +303,10 @@ export const PageElement = styled.li`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media only screen and (max-width: 425px) {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
 `;
